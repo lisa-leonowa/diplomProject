@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_main.css' %}"/>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_body.css' %}"/>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_header.css' %}"/>
+    <title>{{ title }}</title>
+
+</head>
+<body>
+<header class="header">
+
+    {% include "form.html"%}
+
+    <select id="selectID" class="trigger_select">
+        <option id="last_name" value=”last_name” class="last_name">Фамилия</option>
+        <option id="phone" value=”phone” class="phone">Номер телефона</option>
+    </select>
+
+
+    <a href="/newClient" class="buttons">Новый клиент</a>
+</header>
+<main>
+
+    {% for i in clients.values %}
+    <div class="container_client_content">
+        <div class="container_client">
+            <p>ФИО: {{ i.last_name }} {{ i.first_name }} {{ i.full_name }}</p>
+            <button type="button" class="trigger">Подробнее</button>
+        </div>
+        <div class="content">
+
+            <div id="{{ i.id }}" class="content_client_value">
+                <p class="client_value">Фамилия: {{ i.last_name }}</p>
+                <p class="client_value">Имя: {{ i.first_name }}</p>
+                <p class="client_value">Отчество: {{ i.full_name }}</p>
+                <p class="client_value">Пол: {{ i.gender }}</p>
+                <p class="client_value">Контактный телефон: {{ i.phone }}</p>
+                <p class="client_value">Примечание: {{ i.remark }}</p>
+            </div>
+
+            <div class="buttons_clients">
+                <button id="updateClient/{{ i.id }}" type="button" onclick="changeClick({{ i.id }}, 'updateClient/{{ i.id }}')">Изменить</button>
+                <a href="/">Покупка услуги</a>
+                <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+                <script>
+                    function changeClick(my_id, updateButton){
+                        let change = document.getElementById(my_id); // get the paragraph element by id
+                        let btn = document.getElementById(updateButton);
+                        let new_change = change.getAttribute("contenteditable");
+                        if (change.hasAttribute("contenteditable")) {
+                            change.removeAttribute("contenteditable");
+                            btn.innerHTML = "Изменить";
+
+                            $.ajax({
+                                url: updateButton,
+                                success: function() {
+                                alert('Информация изменена успешно!')
+                                }
+                            });
+                        }
+                        else {
+                            change.setAttribute("contenteditable", true);
+                            btn.innerHTML = "Сохранить";
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% load static %}
+    <script src="{% static 'scripts/index.js'%}"></script>
+
+</main>
+</body>
+</html>
