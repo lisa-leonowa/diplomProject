@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<div class="content">
+    <p>{{ message }}</p>
+    <form method="post" action="newClient">
+        {% csrf_token %}
+        <label>Фамилия:</label>{{ forms.last_name }}<br>
+        <label>Имя:</label>{{ forms.first_name }}<br>
+        <label>Отчество:</label>{{ forms.full_name }}<br>
+        <label>Пол:</label>{{ forms.gender }}<br>
+        <label>Контактный телефон:</label>{{ forms.phone }}<br>
+        <label>Примечание:</label>{{ forms.remark }}<br>
+        <input type="submit" value="Добавить">
+    </form>
+
+</div>
+</html>

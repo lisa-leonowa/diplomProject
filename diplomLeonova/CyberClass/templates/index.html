@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'styles/for_main.css' %}"/>
-
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'styles/for_body.css' %}"/>
-
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'styles/for_header.css' %}"/>
     <title>{{ title }}</title>
@@ -15,59 +13,64 @@
 </head>
 <body>
 <header class="header">
-
-    {% include "form.html"%}
-
     <select id="selectID" class="trigger_select">
         <option id="last_name" value=”last_name” class="last_name">Фамилия</option>
         <option id="phone" value=”phone” class="phone">Номер телефона</option>
     </select>
-
-
-    <a href="/newClient" class="buttons">Новый клиент</a>
+    <a href="newClient" class="buttons">Новый клиент</a>
 </header>
 <main>
-
-    {% for i in clients.values %}
+    {% for key, i in forms.items %}
     <div class="container_client_content">
         <div class="container_client">
-            <p>ФИО: {{ i.last_name }} {{ i.first_name }} {{ i.full_name }}</p>
+            <p>ФИО{{ i.id.value}}: {{ i.last_name.value}} {{ i.first_name.value }} {{ i.full_name.value }}</p>
             <button type="button" class="trigger">Подробнее</button>
+
         </div>
         <div class="content">
-
-            <div id="{{ i.id }}" class="content_client_value">
-                <p class="client_value">Фамилия: {{ i.last_name }}</p>
-                <p class="client_value">Имя: {{ i.first_name }}</p>
-                <p class="client_value">Отчество: {{ i.full_name }}</p>
-                <p class="client_value">Пол: {{ i.gender }}</p>
-                <p class="client_value">Контактный телефон: {{ i.phone }}</p>
-                <p class="client_value">Примечание: {{ i.remark }}</p>
-            </div>
+            <form id="{{key}}" method="post" class="content_client_value" action="{{key}}">
+                {% csrf_token %}
+                <label>Фамилия:</label>{{ i.last_name }}<br>
+                <label>Имя:</label>{{ i.first_name }}<br>
+                <label>Отчество:</label>{{ i.full_name }}<br>
+                <label>Пол:</label>{{ i.gender }}<br>
+                <label>Контактный телефон:</label>{{ i.phone }}<br>
+                <label>Примечание:</label>{{ i.remark }}<br>
+                <input id="btnHidden{{key}}" type="submit" value="Сохранить">
+            </form>
+            <script>
+                    let change{{key}} = document.getElementById({{key}}).getElementsByTagName("input"); // получение формы с нужным id
+                    var index; // переменная счетчик
+                    let btnHidden{{key}} = document.getElementById("btnHidden{{key}}");
+                    for (index = 0; index < change{{key}}.length; ++index) { // цикл, меняющий значение возможности редактировать
+                            if (change{{key}}[index].hasAttribute("readonly")) {
+                                change{{key}}[index].removeAttribute("readonly");
+                                btnHidden{{key}}.removeAttribute("hidden"); }
+                            else { change{{key}}[index].setAttribute("readonly", "readonly");
+                                    btnHidden{{key}}.setAttribute("hidden", "hidden"); }
+                        }
+            </script>
 
             <div class="buttons_clients">
-                <button id="updateClient/{{ i.id }}" type="button" onclick="changeClick({{ i.id }}, 'updateClient/{{ i.id }}')">Изменить</button>
+                <button id="updateClient/{{ key }}" type="button"
+                        onclick="changeClick({{ key }}, 'updateClient/{{ key }}', 'btnHidden{{key}}')">Изменить
+                </button>
                 <a href="/">Покупка услуги</a>
-                <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
                 <script>
-                    function changeClick(my_id, updateButton){
-                        let change = document.getElementById(my_id); // get the paragraph element by id
-                        let btn = document.getElementById(updateButton);
-                        let new_change = change.getAttribute("contenteditable");
-                        if (change.hasAttribute("contenteditable")) {
-                            change.removeAttribute("contenteditable");
-                            btn.innerHTML = "Изменить";
+                    function changeClick(my_id, updateButton, BtnHidden){
 
-                            $.ajax({
-                                url: updateButton,
-                                success: function() {
-                                alert('Информация изменена успешно!')
-                                }
-                            });
-                        }
-                        else {
-                            change.setAttribute("contenteditable", true);
-                            btn.innerHTML = "Сохранить";
+                        let change = document.getElementById(my_id).getElementsByTagName("input"); // получение формы с нужным id
+                        let btn = document.getElementById(updateButton); // получение кнопки с нужным id
+
+                        var index; // переменная счетчик
+                        let btnHidden = document.getElementById(BtnHidden);
+
+                        for (index = 0; index < 6; ++index) { // цикл, меняющий значение возможности редактировать
+                            if (change[index].hasAttribute("readonly")) {
+                                change[index].removeAttribute("readonly");
+                                btnHidden.removeAttribute("hidden"); }
+                            else { change[index].setAttribute("readonly", "readonly");
+                                   btnHidden.setAttribute("hidden", "hidden"); }
                         }
                     }
                 </script>
@@ -77,7 +80,6 @@
     {% endfor %}
     {% load static %}
     <script src="{% static 'scripts/index.js'%}"></script>
-
 </main>
 </body>
 </html>
