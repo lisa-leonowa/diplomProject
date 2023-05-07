@@ -1,7 +1,9 @@
-# Подключение модулей для работы с моделями, обработки событий, получение измененной информации, проверки номера телефона
+# Подключение модулей для работы с моделями, обработки событий,
+# получение измененной информации, проверки номера телефона
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.shortcuts import render, redirect
 from .models import Clients, ClientsForm
+from .forms import SearchClient
 from django.http import HttpResponse
 import re
 
@@ -16,7 +18,8 @@ def get_values(valid_form):
         for i in valid_form.form_values():  # переборка значений
             value.append(valid_form.cleaned_data[i])  # добавления значения в массив
         return value  # возврат массива с данными
-    return "Invalied Data"  # сообщение об ошибке
+    return "Invalid Data"  # сообщение об ошибке
+
 
 def add_client(valid_form):
     value = get_values(valid_form)
@@ -24,38 +27,43 @@ def add_client(valid_form):
     first_name = value[1][0].upper() + value[1][1:].lower()
     full_name = value[2][0].upper() + value[2][1:].lower()
     phone = re.match(r'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', value[4])
-    check = bool(phone) and (not any(ch.isdigit() for ch in last_name+first_name+full_name))
+    check = bool(phone) and (not any(ch.isdigit() for ch in last_name + first_name + full_name))
     if check:
-        client = Clients.objects.create(last_name=last_name, first_name=first_name, full_name=full_name, gender=value[3],
-                                        phone=value[4], remark=value[5])
+        Clients.objects.create(last_name=last_name, first_name=first_name, full_name=full_name,
+                               gender=value[3],
+                               phone=value[4], remark=value[5])
         return True
     return [last_name, first_name, full_name, value[3], value[4], value[5]]
 
 
-# Create your views here.
+def deleteClient(request, id_client):
+    Clients.objects.filter(id=id_client).delete()  # удаление нужного клиента по id
+    return redirect('/0')  # переход на основную страницу
+
+
 # добавление нового клиента
 def newClient(request):
-    context = {'title': 'Добавление клиента'}  # определение словаря с заголовком страницы
-    context['forms'] = ClientsForm()  # получение форм всех клиентов
-    if (request.method == 'POST'):
+    context = {'title': 'Добавление клиента',
+               'forms': ClientsForm()}  # определение словаря с заголовком страницы
+    if request.method == 'POST':
         status = add_client(ClientsForm(request.POST))
-        if status == True:
+        if status:
             return redirect('/0')
         else:
             context['forms'] = ClientsForm(initial={'last_name': status[0],
-                                  'first_name': status[1],
-                                  'full_name': status[2],
-                                  'gender': status[3],
-                                  'phone': status[4],
-                                  'remark': status[5],})
+                                                    'first_name': status[1],
+                                                    'full_name': status[2],
+                                                    'gender': status[3],
+                                                    'phone': status[4],
+                                                    'remark': status[5], })
             context['message'] = 'Данные были введены неверно!'
     return render(request, "newClient.html", context=context)
 
 
 # Обновление информации о клиенте
-def updateClient(userform, id):
-    values = get_values(userform)  # получение новой информации
-    client = Clients.objects.get(id=id)  # выбор нужного клиента в базе
+def updateClient(clientform, id_client):
+    values = get_values(clientform)  # получение новой информации
+    client = Clients.objects.get(id=id_client)  # выбор нужного клиента в базе
     # изменение информации
     client.last_name = values[0]
     client.first_name = values[1]
@@ -64,7 +72,6 @@ def updateClient(userform, id):
     client.phone = values[4]
     client.remark = values[5]
     client.save()  # сохранение изменения
-
 
 
 # получение информации о всех клиентах
@@ -82,16 +89,37 @@ def get_clients():
     return initial_clients  # возврат
 
 
+def searchClient(search):
+    initial_clients = {}
+    search = get_values(search)[0]  # получение данных из формы поиска
+    search_list_last_name = Clients.objects.filter(last_name__contains=search)
+    search_list_phone = Clients.objects.filter(phone__contains=search)
+    if len(search_list_last_name) != 0:
+        search_list = search_list_last_name
+    else:
+        search_list = search_list_phone
+    for i in search_list:
+        initial_clients[i.id] = ClientsForm(initial={'last_name': i.last_name,
+                                                     'first_name': i.first_name,
+                                                     'full_name': i.full_name,
+                                                     'gender': i.gender,
+                                                     'phone': i.phone,
+                                                     'remark': i.remark}, )
+    return initial_clients
+
+
 # работа главной станицы
-def index(request, id):
-    context = {'title': 'Система управление клиентами'} # определение словаря с заголовком страницы
-    if (request.method == "POST") and (id != 0):  # обработка изменения информации
-        userform = ClientsForm(request.POST)  # заполненная форма
-        updateClient(userform, id)  # вызов функции обновления информации
-        return redirect('/0')  # переход на основную страницу
-
-    elif (request.method == 'POST') and (id == 0):  # обработка отображения информации
-        pass
-    context['forms'] = get_clients()  # получение форм всех клиентов
-
+def index(request, id_client):
+    context = {'title': 'Система управление клиентами',
+               'forms': get_clients(),
+               'formSearch': SearchClient()}  # определение словаря с заголовком страницы
+    if (request.method == "POST") and (id_client != 0):  # обработка изменения информации
+        user_form = ClientsForm(request.POST)  # заполненная форма
+        updateClient(user_form, id_client)  # вызов функции обновления информации
+        return redirect('/0')
+    elif (request.method == 'POST') and (id_client == 0):  # обработка поиска
+        search_clients = SearchClient(request.POST)
+        if search_clients.is_valid():
+            context['forms'] = searchClient(search_clients)
+            return render(request, "index.html", context=context)
     return render(request, "index.html", context=context)

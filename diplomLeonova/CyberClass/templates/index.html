@@ -13,10 +13,13 @@
 </head>
 <body>
 <header class="header">
-    <select id="selectID" class="trigger_select">
-        <option id="last_name" value=”last_name” class="last_name">Фамилия</option>
-        <option id="phone" value=”phone” class="phone">Номер телефона</option>
-    </select>
+     <form method="POST">
+        {% csrf_token %}
+         <div>
+            {{ formSearch }}
+            <input type="submit" value="Поиск"/>
+         </div>
+     </form>
     <a href="newClient" class="buttons">Новый клиент</a>
 </header>
 <main>
@@ -24,8 +27,8 @@
     <div class="container_client_content">
         <div class="container_client">
             <p>ФИО{{ i.id.value}}: {{ i.last_name.value}} {{ i.first_name.value }} {{ i.full_name.value }}</p>
+            <a type="button" href="delete/{{key}}" >Удалить</a>
             <button type="button" class="trigger">Подробнее</button>
-
         </div>
         <div class="content">
             <form id="{{key}}" method="post" class="content_client_value" action="{{key}}">

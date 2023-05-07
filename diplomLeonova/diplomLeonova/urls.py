@@ -21,5 +21,6 @@ from CyberClass import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('newClient', views.newClient),
-    path('<int:id>', views.index),
+    path('<int:id_client>', views.index),
+    path('delete/<int:id_client>', views.deleteClient),
 ]
