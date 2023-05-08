@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<div class="content">
+    <p>{{ message }}</p>
+    <form method="post" action="newService">
+        {% csrf_token %}
+        <label>Название курса:</label>{{ forms.name_services }}<br>
+        <label>Длительность:</label>{{ forms.service_duration }}<br>
+        <label>Стоимость:</label>{{ forms.price }}<br>
+        <label>Описание курса:</label>{{ forms.description }}<br>
+        <input type="submit" value="Добавить">
+    </form>
+
+</div>
+</html>

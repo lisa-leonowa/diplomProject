@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_main.css' %}"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_body.css' %}"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_header.css' %}"/>
+    <title>{{ title }}</title>
+
+</head>
+<body>
+<header class="header">
+     <form method="POST">
+        {% csrf_token %}
+         <div>
+            {{ formSearch }}
+            <input type="submit" value="Поиск"/>
+         </div>
+     </form>
+    <a href="newService" class="buttons">Новая услуга</a>
+</header>
+<main>
+    {% for key, i in forms.items %}
+    <div class="container_client_content">
+        <div class="container_client">
+            <p>Название услуги: {{ i.name_services.value}}</p>
+            <a type="button" href="/services/delete/{{key}}" >Удалить</a>
+            <button type="button" class="trigger">Подробнее</button>
+        </div>
+        <div class="content">
+            <form id="{{key}}" method="post" class="content_client_value" action="/services/{{key}}">
+                {% csrf_token %}
+                <label>Название курса:</label>{{ i.name_services }}<br>
+                <label>Длительность (в мин):</label>{{ i.service_duration }}<br>
+                <label>Стоимость:</label>{{ i.price }}<br>
+                <label>Описание курса:</label>{{ i.description }}<br>
+                <input id="btnHidden{{key}}" type="submit" value="Сохранить">
+            </form>
+            <script>
+                    let change{{key}} = document.getElementById({{key}}).getElementsByTagName("input"); // получение формы с нужным id
+                    var index; // переменная счетчик
+                    let btnHidden{{key}} = document.getElementById("btnHidden{{key}}");
+                    for (index = 0; index < change{{key}}.length; ++index) { // цикл, меняющий значение возможности редактировать
+                            if (change{{key}}[index].hasAttribute("readonly")) {
+                                change{{key}}[index].removeAttribute("readonly");
+                                btnHidden{{key}}.removeAttribute("hidden"); }
+                            else { change{{key}}[index].setAttribute("readonly", "readonly");
+                                    btnHidden{{key}}.setAttribute("hidden", "hidden"); }
+                        }
+            </script>
+
+            <div class="buttons_clients">
+                <button id="updateClient/{{ key }}" type="button"
+                        onclick="changeClick({{ key }}, 'updateClient/{{ key }}', 'btnHidden{{key}}')">Изменить
+                </button>
+                <a href="/">Покупка услуги</a>
+                <script>
+                    function changeClick(my_id, updateButton, BtnHidden){
+
+                        let change = document.getElementById(my_id).getElementsByTagName("input"); // получение формы с нужным id
+                        let btn = document.getElementById(updateButton); // получение кнопки с нужным id
+
+                        var index; // переменная счетчик
+                        let btnHidden = document.getElementById(BtnHidden);
+
+                        for (index = 0; index < 5; ++index) { // цикл, меняющий значение возможности редактировать
+                            if (change[index].hasAttribute("readonly")) {
+                                change[index].removeAttribute("readonly");
+                                btnHidden.removeAttribute("hidden"); }
+                            else { change[index].setAttribute("readonly", "readonly");
+                                   btnHidden.setAttribute("hidden", "hidden"); }
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% load static %}
+    <script src="{% static 'scripts/index.js'%}"></script>
+</main>
+</body>
+</html>
