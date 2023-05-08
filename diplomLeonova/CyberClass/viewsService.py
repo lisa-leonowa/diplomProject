@@ -4,16 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.shortcuts import render, redirect
 from .models import Services, ServicesForm
 from .forms import SearchClient
-
-
-# получение значений из формы
-def get_values(valid_form):
-    if valid_form.is_valid():  # если форма была отправлена
-        value = []  # массив для хранения значений формы
-        for i in valid_form.form_values():  # переборка значений
-            value.append(valid_form.cleaned_data[i])  # добавления значения в массив
-        return value  # возврат массива с данными
-    return "Invalid Data"  # сообщение об ошибке
+from .forCyberClass import get_values
 
 
 # получение информации о всех услугах
@@ -76,9 +67,9 @@ def searchService(search):
 
     for i in search_list:
         initial_clients[i.id] = ServicesForm(initial={'name_services': i.name_services,
-                                                     'service_duration': i.service_duration,
-                                                     'price': i.price,
-                                                     'description': i.description}, )
+                                                      'service_duration': i.service_duration,
+                                                      'price': i.price,
+                                                      'description': i.description}, )
     return initial_clients
 
 

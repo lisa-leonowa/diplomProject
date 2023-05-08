@@ -21,6 +21,12 @@ class Services(models.Model):
     description = models.CharField('Описание курса', max_length=200, null=True, blank=True)  # Описание курса
 
 
+class Deals(models.Model):
+    id_client = models.ForeignKey(Clients, on_delete=models.CASCADE)
+    id_service = models.ForeignKey(Services, on_delete=models.DO_NOTHING)
+    date_deals = models.DateField()
+
+
 class ClientsForm(ModelForm):
     class Meta:
         model = Clients

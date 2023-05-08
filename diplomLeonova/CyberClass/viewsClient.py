@@ -4,18 +4,9 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.shortcuts import render, redirect
 from .models import Clients, ClientsForm
 from .forms import SearchClient
+from .forCyberClass import get_values
 from django.http import HttpResponse
 import re
-
-
-# получение значений из формы
-def get_values(valid_form):
-    if valid_form.is_valid():  # если форма была отправлена
-        value = []  # массив для хранения значений формы
-        for i in valid_form.form_values():  # переборка значений
-            value.append(valid_form.cleaned_data[i])  # добавления значения в массив
-        return value  # возврат массива с данными
-    return "Invalid Data"  # сообщение об ошибке
 
 
 def add_client(valid_form):
@@ -26,9 +17,12 @@ def add_client(valid_form):
     phone = re.match(r'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', value[4])
     check = bool(phone) and (not any(ch.isdigit() for ch in last_name + first_name + full_name))
     if check:
-        Clients.objects.create(last_name=last_name, first_name=first_name, full_name=full_name,
+        Clients.objects.create(last_name=last_name,
+                               first_name=first_name,
+                               full_name=full_name,
                                gender=value[3],
-                               phone=value[4], remark=value[5])
+                               phone=value[4],
+                               remark=value[5])
         return True
     return [last_name, first_name, full_name, value[3], value[4], value[5]]
 
