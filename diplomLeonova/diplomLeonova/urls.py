@@ -16,11 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from CyberClass import views
+from CyberClass import viewsClient, viewsService
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('newClient', views.newClient),
-    path('<int:id_client>', views.index),
-    path('delete/<int:id_client>', views.deleteClient),
+    path('newClient', viewsClient.newClient),
+    path('<int:id_client>', viewsClient.index),
+    path('delete/<int:id_client>', viewsClient.deleteClient),
+
+    path('services/newService', viewsService.newService),
+    path('services/<int:id_service>', viewsService.index),
+    path('services/delete/<int:id_service>', viewsService.deleteService),
 ]

@@ -26,7 +26,7 @@
     {% for key, i in forms.items %}
     <div class="container_client_content">
         <div class="container_client">
-            <p>ФИО{{ i.id.value}}: {{ i.last_name.value}} {{ i.first_name.value }} {{ i.full_name.value }}</p>
+            <p>ФИО: {{ i.last_name.value}} {{ i.first_name.value }} {{ i.full_name.value }}</p>
             <a type="button" href="delete/{{key}}" >Удалить</a>
             <button type="button" class="trigger">Подробнее</button>
         </div>

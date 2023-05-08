@@ -7,9 +7,6 @@ from .forms import SearchClient
 from django.http import HttpResponse
 import re
 
-from django.contrib.sites.shortcuts import get_current_site
-import requests
-
 
 # получение значений из формы
 def get_values(valid_form):
@@ -108,7 +105,7 @@ def searchClient(search):
     return initial_clients
 
 
-# работа главной станицы
+# работа главной станицы клиентов
 def index(request, id_client):
     context = {'title': 'Система управление клиентами',
                'forms': get_clients(),
@@ -118,8 +115,8 @@ def index(request, id_client):
         updateClient(user_form, id_client)  # вызов функции обновления информации
         return redirect('/0')
     elif (request.method == 'POST') and (id_client == 0):  # обработка поиска
-        search_clients = SearchClient(request.POST)
-        if search_clients.is_valid():
-            context['forms'] = searchClient(search_clients)
+        search_clients = SearchClient(request.POST)  # заполненная форма поиска
+        if search_clients.is_valid():  # если форма отправлена
+            context['forms'] = searchClient(search_clients)  # вызов функции поиска
             return render(request, "index.html", context=context)
     return render(request, "index.html", context=context)
