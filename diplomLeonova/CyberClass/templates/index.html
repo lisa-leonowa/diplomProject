@@ -31,28 +31,37 @@
     {% for key, i in forms.items %}
     <div class="container_client_content">
         <div class="container_client">
-            <p>ФИО: {{ i.last_name.value}} {{ i.first_name.value }} {{ i.full_name.value }}</p>
+            <p>ФИО: {{ i.0.last_name.value}} {{ i.0.first_name.value }} {{ i.0.full_name.value }}</p>
             <a type="button" href="delete/{{key}}" >Удалить</a>
             <button type="button" class="trigger">Подробнее</button>
         </div>
         <div class="content">
+            <div>
+                <form id="{{key}}" method="post" class="content_client_value" action="{{key}}">
+                    {% csrf_token %}
+                    <label>Фамилия:</label>{{ i.0.last_name }}<br>
+                    <label>Имя:</label>{{ i.0.first_name }}<br>
+                    <label>Отчество:</label>{{ i.0.full_name }}<br>
+                    <label>Пол:</label>{{ i.0.gender }}<br>
+                    <label>Контактный телефон:</label>{{ i.0.phone }}<br>
+                    <label>Примечание:</label>{{ i.0.remark }}<br>
+                    <input id="btnHidden{{key}}" type="submit" value="Сохранить">
+                </form>
+                <script>startForms('{{key}}', 'btnHidden{{key}}')</script>
+                <div>
+                    <label>История покупок:</label>
 
-            <form id="{{key}}" method="post" class="content_client_value" action="{{key}}">
-                {% csrf_token %}
-                <label>Фамилия:</label>{{ i.last_name }}<br>
-                <label>Имя:</label>{{ i.first_name }}<br>
-                <label>Отчество:</label>{{ i.full_name }}<br>
-                <label>Пол:</label>{{ i.gender }}<br>
-                <label>Контактный телефон:</label>{{ i.phone }}<br>
-                <label>Примечание:</label>{{ i.remark }}<br>
-                <input id="btnHidden{{key}}" type="submit" value="Сохранить">
-            </form>
-            <script>startForms('{{key}}', 'btnHidden{{key}}')</script>
+                    {% for j in i.1 %}
+                    <p>{{ j }}</p>
+                    {% endfor %}
+                </div>
+            </div>
             <div class="buttons_clients">
                 <button id="updateClient/{{ key }}" type="button"
                 onclick="changeClick({{ key }}, 'updateClient/{{ key }}', 'btnHidden{{key}}')">Изменить
                 </button>
                 <a href="/deals/{{key}}">Покупка услуги</a>
+                <a href="/deals/delete/{{key}}">Очистить историю покупок</a>
             </div>
         </div>
     </div>

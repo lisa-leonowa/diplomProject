@@ -22,3 +22,10 @@ def add_deals(id_client, id_service):
     Deals.objects.create(id_client=Clients.objects.get(id=id_client),
                          id_service=Services.objects.get(id=id_service),
                          date_deals=date.today())
+
+
+def delete_deals(request, id_client):
+    deals = Deals.objects.filter(id_client=id_client)
+    for i in deals:
+        i.delete()
+    return redirect('/0')
