@@ -1,7 +1,7 @@
-function startForms(){
-    let change = document.getElementById("clientForm").getElementsByTagName(input); // получение формы с нужным id
+function startForms(my_id, btnHidden_id){
+    let change = document.getElementById(my_id).getElementsByTagName("input"); // получение формы с нужным id
     var index; // переменная счетчик
-    let btnHidden = document.getElementById("btnHidden");
+    let btnHidden = document.getElementById(btnHidden_id);
     for (index = 0; index < change.length; ++index) { // цикл, меняющий значение возможности редактировать
             if (change[index].hasAttribute("readonly")) {
                 change[index].removeAttribute("readonly");
@@ -9,4 +9,5 @@ function startForms(){
             else { change[index].setAttribute("readonly", "readonly");
                     btnHidden.setAttribute("hidden", "hidden"); }
     }
+
 }

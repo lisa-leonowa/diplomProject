@@ -8,6 +8,7 @@ def choice_service():
         services += (i.id, i.name_services),
     return services
 
+
 def get_values(valid_form):
     if valid_form.is_valid():  # если форма была отправлена
         value = []  # массив для хранения значений формы
