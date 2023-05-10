@@ -22,46 +22,69 @@
         {% csrf_token %}
         <div>
             {{ formSearch }}
-            <input type="submit" value="Поиск"/>
+            <input type="submit" class="buttons_btn" value="Поиск"/>
         </div>
     </form>
-    <a href="newClient" class="buttons">Новый клиент</a>
+    <div class="container_header_btn">
+        <a href="/statistics" class="buttons_a">Статистика</a>
+        <a href="/0" class="buttons_a">Работа с клиентами</a>
+        <a href="/services/0" class="buttons_a">Работа с услугами</a>
+        <a href="/newClient" class="buttons_a">Новый клиент</a>
+    </div>
 </header>
 <main>
     {% for key, i in forms.items %}
     <div class="container_client_content">
         <div class="container_client">
             <p>ФИО: {{ i.0.last_name.value}} {{ i.0.first_name.value }} {{ i.0.full_name.value }}</p>
-            <a type="button" href="delete/{{key}}" >Удалить</a>
-            <button type="button" class="trigger">Подробнее</button>
+            <a type="button" class='buttons_a' href="delete/{{key}}">Удалить</a>
+            <button type="button" class="trigger buttons_btn">Подробнее</button>
         </div>
         <div class="content">
-            <div>
-                <form id="{{key}}" method="post" class="content_client_value" action="{{key}}">
+            <div class="content_client">
+                <form id="{{key}}" method="post" class="form_client container_new_client" action="{{key}}">
                     {% csrf_token %}
-                    <label>Фамилия:</label>{{ i.0.last_name }}<br>
-                    <label>Имя:</label>{{ i.0.first_name }}<br>
-                    <label>Отчество:</label>{{ i.0.full_name }}<br>
-                    <label>Пол:</label>{{ i.0.gender }}<br>
-                    <label>Контактный телефон:</label>{{ i.0.phone }}<br>
-                    <label>Примечание:</label>{{ i.0.remark }}<br>
-                    <input id="btnHidden{{key}}" type="submit" value="Сохранить">
+                    <div>
+                        <div class="field_client_label"><label>Фамилия:</label></div>
+                        <div class="field_client_input">{{ i.0.last_name }}</div>
+                    </div>
+                    <div>
+                        <div class="field_client_label"><label>Имя:</label></div>
+                        <div class="field_client_input">{{ i.0.first_name }}</div>
+                    </div>
+                    <div>
+                        <div class="field_client_label"><label>Отчество:</label></div>
+                        <div class="field_client_input">{{ i.0.full_name }}</div>
+                    </div>
+                    <div>
+                        <div class="field_client_label"><label>Пол:</label></div>
+                        <div class="field_client_input">{{ i.0.gender }}</div>
+                    </div>
+                    <div>
+                        <div class="field_client_label"><label>Контактный телефон:</label></div>
+                        <div class="field_client_input">{{ i.0.phone }}</div>
+                    </div>
+                    <div>
+                        <div class="field_client_label"><label>Примечание:</label></div>
+                        <div class="field_client_input">{{ i.0.remark }}</div>
+                    </div>
+                    <input id="btnHidden{{key}}" type="submit" class="buttons_btn" value="Сохранить">
                 </form>
                 <script>startForms('{{key}}', 'btnHidden{{key}}')</script>
-                <div>
-                    <label>История покупок:</label>
+                <div class="purchase_history">
+                    <div>История покупок:</div>
 
                     {% for j in i.1 %}
                     <p>{{ j }}</p>
                     {% endfor %}
                 </div>
             </div>
-            <div class="buttons_clients">
-                <button id="updateClient/{{ key }}" type="button"
-                onclick="changeClick({{ key }}, 'updateClient/{{ key }}', 'btnHidden{{key}}')">Изменить
+            <div class="container_buttons_clients">
+                <button id="updateClient/{{ key }}" type="button" class="buttons_btn"
+                        onclick="changeClick({{ key }}, 'updateClient/{{ key }}', 'btnHidden{{key}}')">Изменить
                 </button>
-                <a href="/deals/{{key}}">Покупка услуги</a>
-                <a href="/deals/delete/{{key}}">Очистить историю покупок</a>
+                <a href="/deals/{{key}}" class='buttons_a'>Покупка услуги</a>
+                <a href="/deals/delete/{{key}}" class='buttons_a'>Очистить покупки</a>
             </div>
         </div>
     </div>

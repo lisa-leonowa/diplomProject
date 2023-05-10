@@ -45,7 +45,8 @@ def add_service(valid_form):
 # добавление нового курса
 def newService(request):
     context = {'title': 'Добавление услуги',
-               'forms': ServicesForm()}  # определение словаря с заголовком страницы
+               'forms': ServicesForm(),
+               'message': 'Добавление услуги'}  # определение словаря с заголовком страницы
     if request.method == 'POST':
         status = add_service(ServicesForm(request.POST))
         if status:

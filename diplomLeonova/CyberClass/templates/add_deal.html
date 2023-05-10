@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_main.css' %}"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_body.css' %}"/>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ title }}</title>
 </head>
-<body>
-<form method="POST" action="/deals/{{id_client}}">
-    {% csrf_token %}
-    <div>
-        <label>ФИО клиента: {{client}}</label>
-        <label>Покупаемый курс: </label>{{ formDeal.service }}
-        <input type="submit" value="Добавить"/>
-    </div>
-</form>
+<body class="align_new_client">
+<div class="container_client_content">
+    <form method="POST" class="container_new_client" action="/deals/{{id_client}}">
+        {% csrf_token %}
+        <div class="deal_client_label"><label>ФИО клиента: {{ client }}</label></div>
+        <div>
+            <div class="deal_client_label"><label>Покупаемый курс:</label></div>
+            <div class="deal_client_input">{{ formDeal.service }}</div>
+        </div>
+        <div>
+            <a type="button" class='buttons_a' href="/0">Отмена</a>
+            <input type="submit" class="buttons_btn" value="Добавить"/>
+        </div>
+    </form>
+</div>
 </body>
 </html>

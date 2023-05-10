@@ -2,10 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_main.css' %}"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_body.css' %}"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_header.css' %}"/>
+    <meta charset="UTF-8">
     <title>{{ title }}</title>
 </head>
 <body>
-  {% load static %}
-  <img src="{% static 'img/diagram.png'%}">
+<header class="statistics_header_btn">
+    <a href="/statistics" class="buttons_a">Статистика</a>
+    <a href="/0" class="buttons_a">Работа с клиентами</a>
+    <a href="/services/0" class="buttons_a">Работа с услугами</a>
+</header>
+<main>
+    <p class="img_align">
+        {% load static %}
+        <img src="{% static 'img/diagram.png'%}">
+    </p>
+</main>
 </body>
 </html>

@@ -23,31 +23,50 @@
         {% csrf_token %}
         <div>
             {{ formSearch }}
-            <input type="submit" value="Поиск"/>
+            <input type="submit" class="buttons_btn" value="Поиск"/>
         </div>
     </form>
-    <a href="newService" class="buttons">Новая услуга</a>
+    <div class="container_header_btn">
+        <a href="/statistics" class="buttons_a">Статистика</a>
+        <a href="/0" class="buttons_a">Работа с клиентами</a>
+        <a href="/services/0" class="buttons_a">Работа с услугами</a>
+        <a href="/services/newService" class="buttons_a">Новая услуга</a>
+    </div>
 </header>
 <main>
     {% for key, i in forms.items %}
     <div class="container_client_content">
         <div class="container_client">
             <p>Название услуги: {{ i.name_services.value}}</p>
-            <a type="button" href="/services/delete/{{key}}">Удалить</a>
-            <button type="button" class="trigger">Подробнее</button>
+            <a type="button" class='buttons_a' href="/services/delete/{{key}}">Удалить</a>
+            <button type="button" class="trigger buttons_btn">Подробнее</button>
         </div>
         <div class="content">
-            <form id="{{key}}" method="post" class="content_client_value" action="/services/{{key}}">
-                {% csrf_token %}
-                <label>Название курса:</label>{{ i.name_services }}<br>
-                <label>Длительность (в мин):</label>{{ i.service_duration }}<br>
-                <label>Стоимость:</label>{{ i.price }}<br>
-                <label>Описание курса:</label>{{ i.description }}<br>
-                <input id="btnHidden{{key}}" type="submit" value="Сохранить">
-            </form>
-            <script>startForms('{{key}}', 'btnHidden{{key}}')</script>
-            <div class="buttons_clients">
-                <button id="updateClient/{{ key }}" type="button"
+            <div class="content_client">
+                <form id="{{key}}" method="post" class="form_client container_new_client" action="/services/{{key}}">
+                    {% csrf_token %}
+                    <div>
+                        <div class="service_client_label"><label>Название курса:</label></div>
+                        <div class="field_client_input">{{ i.name_services }}</div>
+                    </div>
+                    <div>
+                        <div class="service_client_label"><label>Длительность (мин):</label></div>
+                        <div class="field_client_input">{{ i.service_duration }}</div>
+                    </div>
+                    <div>
+                        <div class="service_client_label"><label>Стоимость:</label></div>
+                        <div class="field_client_input">{{ i.price }}</div>
+                    </div>
+                    <div>
+                        <div class="service_client_label"><label>Описание курса:</label></div>
+                        <div class="field_client_input">{{ i.description }}</div>
+                    </div>
+                    <input id="btnHidden{{key}}" type="submit" class="buttons_btn" value="Сохранить">
+                </form>
+                <script>startForms('{{key}}', 'btnHidden{{key}}')</script>
+            </div>
+            <div class="container_buttons_clients">
+                <button id="updateClient/{{ key }}" type="button" class="buttons_btn"
                         onclick="changeClick({{ key }}, 'updateClient/{{ key }}', 'btnHidden{{key}}')">Изменить
                 </button>
             </div>

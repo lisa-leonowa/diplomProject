@@ -4,8 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.shortcuts import render, redirect
 from .models import Clients, ClientsForm
 from .forms import SearchClient
-from .forCyberClass import get_values
-from django.http import HttpResponse
+from .forCyberClass import get_values, client_deals, get_id_all_clients, form_with_deals
 import re
 
 
@@ -23,8 +22,8 @@ def add_client(valid_form):
                                gender=value[3],
                                phone=value[4],
                                remark=value[5])
-        return True
-    return [last_name, first_name, full_name, value[3], value[4], value[5]]
+        return [True]
+    return [False, [last_name, first_name, full_name, value[3], value[4], value[5]]]
 
 
 def deleteClient(request, id_client):
@@ -35,12 +34,14 @@ def deleteClient(request, id_client):
 # добавление нового клиента
 def newClient(request):
     context = {'title': 'Добавление клиента',
-               'forms': ClientsForm()}  # определение словаря с заголовком страницы
+               'forms': ClientsForm(),
+               'message': 'Добавление клиента'}  # определение словаря с заголовком страницы
     if request.method == 'POST':
         status = add_client(ClientsForm(request.POST))
-        if status:
+        if status[0]:
             return redirect('/0')
         else:
+            status = status[1]
             context['forms'] = ClientsForm(initial={'last_name': status[0],
                                                     'first_name': status[1],
                                                     'full_name': status[2],
@@ -102,15 +103,16 @@ def searchClient(search):
 # работа главной станицы клиентов
 def index(request, id_client):
     context = {'title': 'Система управление клиентами',
-               'forms': get_clients(),
-               'formSearch': SearchClient()}  # определение словаря с заголовком страницы
+               'formSearch': SearchClient(),
+               'forms': form_with_deals(get_clients(), client_deals())}
     if (request.method == "POST") and (id_client != 0):  # обработка изменения информации
         user_form = ClientsForm(request.POST)  # заполненная форма
         updateClient(user_form, id_client)  # вызов функции обновления информации
         return redirect('/0')
-    elif (request.method == 'POST') and (id_client == 0):  # обработка поиска
+    elif (request.method == 'POST') and (id_client == 0):  # обработка поиска и просмотр информации
         search_clients = SearchClient(request.POST)  # заполненная форма поиска
         if search_clients.is_valid():  # если форма отправлена
-            context['forms'] = searchClient(search_clients)  # вызов функции поиска
+            context['forms'] = form_with_deals(searchClient(search_clients), client_deals())
             return render(request, "index.html", context=context)
+
     return render(request, "index.html", context=context)

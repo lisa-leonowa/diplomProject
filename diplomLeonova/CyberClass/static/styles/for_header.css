@@ -1,3 +1,4 @@
+/* Стиль шапки сайта */
 .header {
     display: flex;
     flex-wrap: nowrap;
@@ -6,4 +7,18 @@
     margin-left: auto;
     margin-right: auto;
     align-items: center;
+}
+/* Стиль кнопок навигации по разделам (страница статистики) */
+.statistics_header_btn{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+}
+/* Стиль кнопок навигации */
+.container_header_btn{
+    display:flex;
 }

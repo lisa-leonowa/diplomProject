@@ -1,21 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_main.css' %}"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_body.css' %}"/>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
 </head>
-<div class="content">
-    <p>{{ message }}</p>
-    <form method="post" action="newClient">
+<body class="align_new_client">
+<div class="container_client_content">
+    <p class="client_message">{{ message }}</p>
+    <form method="post" class="container_new_client" action="newClient">
         {% csrf_token %}
-        <label>Фамилия:</label>{{ forms.last_name }}<br>
-        <label>Имя:</label>{{ forms.first_name }}<br>
-        <label>Отчество:</label>{{ forms.full_name }}<br>
-        <label>Пол:</label>{{ forms.gender }}<br>
-        <label>Контактный телефон:</label>{{ forms.phone }}<br>
-        <label>Примечание:</label>{{ forms.remark }}<br>
-        <input type="submit" value="Добавить">
+        <div>
+            <div class="field_client_label"><label>Фамилия:</label></div>
+            <div class="field_client_input">{{ forms.last_name }}</div>
+        </div>
+        <div>
+            <div class="field_client_label"><label>Имя:</label></div>
+            <div class="field_client_input">{{ forms.first_name }}</div>
+        </div>
+        <div>
+            <div class="field_client_label"><label>Отчество:</label></div>
+            <div class="field_client_input">{{ forms.full_name }}</div>
+        </div>
+        <div>
+            <div class="field_client_label"><label>Пол:</label></div>
+            <div class="field_client_input">{{ forms.gender }}</div>
+        </div>
+        <div>
+            <div class="field_client_label"><label>Телефон:</label></div>
+            <div class="field_client_input">{{ forms.phone }}</div>
+        </div>
+        <div>
+            <div class="field_client_label"><label>Примечание:</label></div>
+            <div class="field_client_input">{{ forms.remark }}</div>
+        </div>
+        <div>
+            <a type="button" class='buttons_a' href="/0">Отмена</a>
+            <input type="submit" class="buttons_btn" value="Добавить">
+        </div>
     </form>
-
 </div>
+</body>
 </html>

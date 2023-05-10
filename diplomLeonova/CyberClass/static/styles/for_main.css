@@ -1,3 +1,4 @@
+/* Стиль окна информации о клиенте (до нажатия на кнопку подробнее) */
 .content {
     max-height: 0;
     overflow: hidden;
@@ -5,19 +6,20 @@
     display: flex;
     justify-content: space-between;
 }
-
+/*  Стиль окна информации о клиенте (после нажатия на кнопку подробнее) */
 .contentActive {
     max-height: 500px;
     padding-left: 1em;
 }
-
+/* Стиль строки с полем ФИО и кнопками Удалить и Подробнее */
 .container_client {
     margin: 1em;
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
+    align-items: center;
 }
-
+/* Стиль карточки клиента */
 .container_client_content {
     margin-left: auto;
     margin-right: auto;
@@ -27,7 +29,7 @@
     background-color: #B4E3D9;
     border-radius: 1em;
 }
-
+/* Стиль основной строки ФИО Клиента */
 .container_client p {
     padding: 0.2em;
     margin-right: 1em;
@@ -36,54 +38,140 @@
     width: 50em;
     background-color: white;
 }
-
-.client_value {
-    padding: 0.2em;
-    border: 1px solid #007279;
-    border-radius: 0.2em;
-    max-width: 50em;
-    background-color: white;
-}
-
-
-
+/* Стиль кнопки Подробнее */
 .trigger {
-    height: 3em;
     background-color: WhiteSmoke;
-    border: 1em solid WhiteSmoke;
+    border: 0.2em solid WhiteSmoke;
     border-radius: 0.2em;
-}
-
-.buttons_clients a {
-    height: 1em;
-    background-color: WhiteSmoke;
-    border: 1em solid WhiteSmoke;
-    border-radius: 0.2em;
-    text-decoration: none;
     color: #000000;
-    margin-top: 1em;
-    margin-right: 1em;
-    padding-bottom: 0.8em;
-    text-align: center;
+    padding: 0.3em;
+    height: 2.5em;
+    margin: 0.3em;
+}
+/* Стиль кнопок Изменить и Сохранить информацию о клиенте */
+.buttons_btn{
+    font-family: cursive;
+    font-size: 0.9em;
+    background-color: WhiteSmoke;
+    border: 0.2em solid WhiteSmoke;
+    border-radius: 0.2em;
+    color: #000000;
+    padding: 0.3em;
+    height: 2.4em;
+    margin: 0.3em;
 
 }
-
-.buttons_clients {
+/* Стиль колонки с кнопками Изменить, Покупка услуги, Очистить историю покупок */
+.container_buttons_clients {
+    margin: 1em;
     display:flex;
     justify-content: flex-start;
     flex-direction: column;
 }
-
-.content_client_value {
-    width: 50em;
-}
-
-
-.buttons{
+/* Стиль кнопок Покупка услуги, Очистить историю покупок, Удалить, Новый клиент */
+.buttons_a {
     background-color: WhiteSmoke;
     border: 0.2em solid WhiteSmoke;
     border-radius: 0.2em;
     text-decoration: none;
     color: #000000;
-    padding: 0.3em;
+    padding: 0.2em;
+    height: 1.5em;
+    margin: 0.3em;
+    font-size: 0.95em;
+    text-align: center;
+}
+/* Стиль столбца с формой клиента и Историей покупок */
+.content_client{
+    max-width: 30em;
+}
+/* Стиль формы с информацией о клиенте */
+.form_client{
+    max-width: 30em;
+    min-width: auto;
+}
+
+/* Стиль полей с историей покупок */
+.purchase_history{
+    padding: 0.2em;
+    border: 1px solid #007279;
+    border-radius: 0.2em;
+    background-color: white;
+    width: auto;
+    margin-bottom: 0.3em;
+}
+/* Стиль полей с историей покупок (надпись история покупок) */
+.purchase_history div{
+    text-align: center;
+}
+/* Стиль полей с историей покупок (покупки) */
+.purchase_history p{
+    margin: 0.3em;
+}
+
+/* Стиль формы добавления клиента */
+.container_new_client{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+/* Стиль полей добавления клиента */
+.container_new_client div{
+    display: flex;
+    margin-bottom: 0.3em;
+}
+/* Ширина полей с подсказками */
+.field_client_label{
+    width: 7em;
+}
+/*  Ширина полей ввода */
+.field_client_input{
+    width: 20em;
+}
+/* Изменение размера текста в полях ввода */
+.field_client_input input{
+    font-family: cursive;
+    font-size: 0.9em;
+    width: 100%;
+}
+/* Изменение размера текста в полях ввода */
+.field_client_input select{
+    font-family: cursive;
+    font-size: 0.9em;
+    width: 100%;
+}
+/* Стиль строки с ошибками */
+.client_message{
+    text-align: center;
+}
+
+/* Стиль карточки добавления клиента */
+.align_new_client{
+    margin-top: 7em;
+}
+
+/* Стиль карточки покупки услуги */
+.deal_client_label{
+    margin-top: 0.3em;
+}
+/* Стиль карточки покупки услуги */
+.deal_client_label:first-child{
+    margin-bottom: 0.3em;
+}
+/* Изменение размера текста в полях ввода */
+.deal_client_input select{
+    font-family: cursive;
+    font-size: 0.9em;
+    margin-left:25%;
+    width: 100%;
+}
+/* Ширина полей с подсказками страница (услуг) */
+.service_client_label{
+    width: 11em;
+}
+/* Выравнивание картинки по центру страницы */
+.img_align{
+    text-align:center;
 }
