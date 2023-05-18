@@ -23,7 +23,7 @@ class Services(models.Model):
 
 class Deals(models.Model):
     id_client = models.ForeignKey(Clients, on_delete=models.CASCADE)
-    id_service = models.ForeignKey(Services, on_delete=models.DO_NOTHING)
+    id_service = models.ForeignKey(Services, on_delete=models.CASCADE)
     date_deals = models.DateField()
 
 

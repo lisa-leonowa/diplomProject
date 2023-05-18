@@ -175,3 +175,9 @@
 .img_align{
     text-align:center;
 }
+/* Выравнивание окна авторизации */
+.authorization{
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+}

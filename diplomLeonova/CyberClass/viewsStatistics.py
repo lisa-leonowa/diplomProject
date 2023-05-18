@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from django.shortcuts import render, redirect
 
 
-def index(request):
+def index(request, id_user):
 
     services = all_services()
     purchased_services = get_purchased_services()
@@ -24,5 +24,6 @@ def index(request):
     my_path = os.path.dirname(os.path.dirname(__file__))
     plt.savefig(f'{my_path}\\CyberClass\\static\\img\\diagram.png')
     #plt.show()
-    context = {'title': 'Статистика продажи курсов'}
+    context = {'title': 'Статистика продажи курсов',
+               'id_user': id_user}
     return render(request, "indexStatistics.html", context=context)

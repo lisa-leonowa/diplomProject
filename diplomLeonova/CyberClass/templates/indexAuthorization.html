@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_main.css' %}"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_body.css' %}"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_header.css' %}"/>
+
+    {% load static %}
+    <script src="{% static 'scripts/startForms.js'%}"></script>
+    {% load static %}
+    <script src="{% static 'scripts/updateClient.js'%}"></script>
+
+    <title>{{ title }}</title>
+</head>
+<body>
+<main>
+    <div class="container_client_content">
+        <div class="authorization">
+        <p class="client_message">{{ message }}</p>
+            <form method="post" class="form_client container_new_client" action="/">
+                {% csrf_token %}
+                <div>
+                    <div class="field_client_label"><label>Логин:</label></div>
+                    <div class="field_client_input">{{ form.login }}</div>
+                </div>
+                <div>
+                    <div class="field_client_label"><label>Пароль:</label></div>
+                    <div class="field_client_input">{{ form.password }}</div>
+                </div>
+                <input type="submit" class="buttons_btn" value="Вход">
+            </form>
+
+        </div>
+    </div>
+
+</main>
+</body>
+</html>

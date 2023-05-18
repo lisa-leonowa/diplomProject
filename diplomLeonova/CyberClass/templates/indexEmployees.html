@@ -26,11 +26,12 @@
         </div>
     </form>
     <div class="container_header_btn">
-        <a href="/statistics" class="buttons_a">Статистика</a>
-        <a href="/0" class="buttons_a">Работа с клиентами</a>
-        <a href="/services/0" class="buttons_a">Работа с услугами</a>
-        <a href="/employees/0" class="buttons_a">Работа с сотрудниками</a>
-        <a href="/employees/newEmployees" class="buttons_a">Новый сотрудник</a>
+        <a href="/{{id_user}}/statistics" class="buttons_a">Статистика</a>
+        <a href="/{{id_user}}/0" class="buttons_a">Работа с клиентами</a>
+        <a href="/{{id_user}}/services/0" class="buttons_a">Работа с услугами</a>
+        <a href="/{{id_user}}/employees/0" class="buttons_a">Работа с сотрудниками</a>
+        <a href="/{{id_user}}/employees/newEmployees" class="buttons_a">Новый сотрудник</a>
+        <a href="/" class="buttons_a">Выход</a>
     </div>
 </header>
 <main>
@@ -38,12 +39,12 @@
     <div class="container_client_content">
         <div class="container_client">
             <p>ФИ: {{ i.last_name.value}} {{ i.first_name.value }}</p>
-            <a type="button" class='buttons_a' href="/employees/delete/{{key}}">Удалить</a>
+            <a type="button" class='buttons_a' href="/{{id_user}}/employees/delete/{{key}}">Удалить</a>
             <button type="button" class="trigger buttons_btn">Подробнее</button>
         </div>
         <div class="content">
             <div class="content_client">
-                <form id="{{key}}" method="post" class="form_client container_new_client" action="{{key}}">
+                <form id="{{key}}" method="post" class="form_client container_new_client" action="/{{id_user}}/employees/{{key}}">
                     {% csrf_token %}
                     <div>
                         <div class="field_client_label"><label>Фамилия:</label></div>
@@ -74,7 +75,7 @@
                 <button id="updateEmployee/{{ key }}" type="button" class="buttons_btn"
                         onclick="changeClick({{ key }}, 'updateEmployee/{{ key }}', 'btnHidden{{key}}')">Изменить
                 </button>
-                <a type="button" class='buttons_a' href="/employees/new_doc/{{key}}">Сделать копию</a>
+                <a type="button" class='buttons_a' href="/{{id_user}}/employees/new_doc/{{key}}">Сделать копию</a>
             </div>
         </div>
     </div>

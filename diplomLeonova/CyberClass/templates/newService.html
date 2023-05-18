@@ -11,7 +11,7 @@
 <body class="align_new_client">
 <div class="container_client_content">
     <p class="client_message">{{ message }}</p>
-    <form method="post" class="container_new_client" action="newService">
+    <form method="post" class="container_new_client" action="/{{id_user}}/services/newService">
         {% csrf_token %}
         <div>
             <div class="field_client_label"><label>Название курса:</label></div>
@@ -30,7 +30,7 @@
             <div class="field_client_input">{{ forms.description }}</div>
         </div>
         <div>
-            <a type="button" class='buttons_a' href="/services/0">Отмена</a>
+            <a type="button" class='buttons_a' href="/{{id_user}}/services/0">Отмена</a>
             <input type="submit" class="buttons_btn" value="Добавить">
         </div>
     </form>

@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.shortcuts import render, redirect
 from .models import Services, ServicesForm
 from .forms import SearchClient
-from .forCyberClass import get_values
+from .forCyberClass import get_values, check_user
 
 
 # получение информации о всех услугах
@@ -43,22 +43,23 @@ def add_service(valid_form):
 
 
 # добавление нового курса
-def newService(request):
+def newService(request, id_user):
     context = {'title': 'Добавление услуги',
                'forms': ServicesForm(),
-               'message': 'Добавление услуги'}  # определение словаря с заголовком страницы
+               'message': 'Добавление услуги',
+               'id_user': id_user}  # определение словаря с заголовком страницы
     if request.method == 'POST':
         status = add_service(ServicesForm(request.POST))
         if status:
-            return redirect('/services/0')
+            return redirect(f'/{id_user}/services/0')
         else:
             context['message'] = 'Данные были введены неверно!'
     return render(request, "newService.html", context=context)
 
 
-def deleteService(request, id_service):
+def deleteService(request, id_user, id_service):
     Services.objects.filter(id=id_service).delete()  # удаление нужной услуги по id
-    return redirect('/services/0')  # переход на основную страницу
+    return redirect(f'/{id_user}/services/0')  # переход на основную страницу
 
 
 def searchService(search):
@@ -75,18 +76,26 @@ def searchService(search):
 
 
 # работа главной станицы услуг
-def index(request, id_service):
+def index(request, id_user, id_service):
     context = {'title': 'Система управление клиентами',
                'forms': get_services(),
-               'formSearch': SearchClient()}  # определение словаря с заголовком страницы
+               'formSearch': SearchClient(),
+               'id_user': id_user}  # определение словаря с заголовком страницы
     if (request.method == "POST") and (id_service != 0):  # обработка изменения информации
         user_form = ServicesForm(request.POST)  # заполненная форма
         updateService(user_form, id_service)  # вызов функции обновления информации
-        return redirect('/services/0')
+        return redirect(f'/{id_user}/services/0')
     if (request.method == 'POST') and (id_service == 0):  # обработка поиска
         pass
         search_service = SearchClient(request.POST)  # заполненная форма поиска
         if search_service.is_valid():  # если форма отправлена
             context['forms'] = searchService(search_service)  # вызов функции поиска
-            return render(request, "indexService.html", context=context)
-    return render(request, "indexService.html", context=context)
+            if check_user(id_user) == 'Администратор':
+                return render(request, "indexService.html", context=context)
+            else:
+                return render(request, "indexServiceDirector.html", context=context)
+
+    if check_user(id_user) == 'Администратор':
+        return render(request, "indexService.html", context=context)
+    else:
+        return render(request, "indexServiceDirector.html", context=context)

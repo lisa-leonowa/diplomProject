@@ -16,27 +16,28 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from CyberClass import viewsClient, viewsService, viewsDeals, viewsStatistics, viewsEmployees
+from CyberClass import viewsClient, viewsService, viewsDeals, viewsStatistics, viewsEmployees, viewsAuthorization
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('newClient', viewsClient.newClient),
-    path('<int:id_client>', viewsClient.index),
-    path('delete/<int:id_client>', viewsClient.deleteClient),
+    path('<int:id_user>/newClient', viewsClient.newClient),
+    path('<int:id_user>/<int:id_client>', viewsClient.index),
+    path('<int:id_user>/delete/<int:id_client>', viewsClient.deleteClient),
 
-    path('services/newService', viewsService.newService),
-    path('services/<int:id_service>', viewsService.index),
-    path('services/delete/<int:id_service>', viewsService.deleteService),
+    path('<int:id_user>/services/newService', viewsService.newService),
+    path('<int:id_user>/services/<int:id_service>', viewsService.index),
+    path('<int:id_user>/services/delete/<int:id_service>', viewsService.deleteService),
 
-    path('deals/<int:id_client>', viewsDeals.client_deals),
-    path('deals/add/<int:id_client>', viewsDeals.add_deals),
-    path('deals/delete/<int:id_client>', viewsDeals.delete_deals),
+    path('<int:id_user>/deals/<int:id_client>', viewsDeals.client_deals),
+    path('<int:id_user>/deals/add/<int:id_client>', viewsDeals.add_deals),
+    path('<int:id_user>/deals/delete/<int:id_client>', viewsDeals.delete_deals),
 
-    path('statistics', viewsStatistics.index),
+    path('<int:id_user>/statistics', viewsStatistics.index),
 
-    path('employees/<int:id_employee>', viewsEmployees.index),
-    path('employees/delete/<int:id_employee>', viewsEmployees.deleteEmployees),
-    path('employees/newEmployees', viewsEmployees.newEmployees),
-    path('employees/new_doc/<int:id_employee>', viewsEmployees.new_doc),
+    path('<int:id_user>/employees/<int:id_employee>', viewsEmployees.index),
+    path('<int:id_user>/employees/delete/<int:id_employee>', viewsEmployees.deleteEmployees),
+    path('<int:id_user>/employees/newEmployees', viewsEmployees.newEmployees),
+    path('<int:id_user>/employees/new_doc/<int:id_employee>', viewsEmployees.new_doc),
 
+    path('', viewsAuthorization.index),
 ]

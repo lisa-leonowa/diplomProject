@@ -1,4 +1,4 @@
-from .models import Services, Deals, Clients
+from .models import Services, Deals, Clients, Employees
 
 
 def choice_service():
@@ -95,3 +95,16 @@ def for_diagram(dict_service, dict_purchased_services):
         else:
             list_value.append(0)
     return [list_name, list_value]
+
+
+def check_user(id_user):
+    user = Employees.objects.get(id=id_user)  # выбор нужного клиента в базе
+    return str(user.role)
+
+
+def get_user(login, password):
+    user = Employees.objects.filter(login=login) & Employees.objects.filter(password=password)
+    if len(user) != 0:
+        print(user[0].id)
+        return user[0].id
+    return False

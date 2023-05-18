@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Employees, EmployeesForm
 from .forms import SearchClient
-from .forCyberClass import get_values, client_deals, get_id_all_clients, form_with_deals
+from .forCyberClass import get_values, check_user
 from docxtpl import DocxTemplate
 
 
@@ -20,15 +20,17 @@ def get_clients():
 
 
 def updateEmployee(user_form, id_employee):
-    values = get_values(user_form)  # получение новой информации
+    value = get_values(user_form)  # получение новой информации
     employee = Employees.objects.get(id=id_employee)  # выбор нужного клиента в базе
-    # изменение информации
-    employee.last_name = values[0]
-    employee.first_name = values[1]
-    employee.login = values[2]
-    employee.password = values[3]
-    employee.role = values[4]
-    employee.save()  # сохранение изменения
+    search_list = Employees.objects.filter(login__contains=value[2])
+    if (len(search_list) == 0) and (len(value[2]) > 7) and (len(value[3]) > 7):
+        # изменение информации
+        employee.last_name = value[0]
+        employee.first_name = value[1]
+        employee.login = value[2]
+        employee.password = value[3]
+        employee.role = value[4]
+        employee.save()  # сохранение изменения
 
 
 def searchEmployee(search):
@@ -44,14 +46,17 @@ def searchEmployee(search):
     return initial_employee
 
 
-def index(request, id_employee):
+def index(request, id_user, id_employee):
     context = {'title': 'Система управление клиентами',
                'formSearch': SearchClient(),
-               'forms': get_clients()}
+               'forms': get_clients(),
+               'id_user': id_user
+               }
     if (request.method == "POST") and (id_employee != 0):  # обработка изменения информации
         user_form = EmployeesForm(request.POST)  # заполненная форма
         updateEmployee(user_form, id_employee)  # вызов функции обновления информации
-        return redirect('/employees/0')
+        if check_user(id_user) != 'Администратор':
+            return redirect(f'/{id_user}/employees/0')
     elif (request.method == 'POST') and (id_employee == 0):  # обработка поиска и просмотр информации
         search_clients = SearchClient(request.POST)  # заполненная форма поиска
         if search_clients.is_valid():  # если форма отправлена
@@ -66,7 +71,7 @@ def add_employee(valid_form):
     last_name = value[0][0].upper() + value[0][1:].lower()
     first_name = value[1][0].upper() + value[1][1:].lower()
     search_list = Employees.objects.filter(login__contains=value[2])
-    if len(search_list) == 0:
+    if (len(search_list) == 0) and (len(value[2]) > 7) and (len(value[3]) > 7):
         Employees.objects.create(last_name=last_name,
                                  first_name=first_name,
                                  login=value[2],
@@ -76,14 +81,16 @@ def add_employee(valid_form):
     return [False, [last_name, first_name, value[2], value[3], value[4]]]
 
 
-def newEmployees(request):
+def newEmployees(request, id_user):
     context = {'title': 'Добавление сотрудника',
                'forms': EmployeesForm(),
-               'message': 'Добавление сотрудника'}  # определение словаря с заголовком страницы
+               'message': 'Добавление сотрудника',
+               'id_user': id_user
+               }  # определение словаря с заголовком страницы
     if request.method == 'POST':
         status = add_employee(EmployeesForm(request.POST))
         if status[0]:
-            return redirect('/employees/0')
+            return redirect(f'/{id_user}/employees/0')
         else:
             status = status[1]
             context['forms'] = EmployeesForm(initial={'last_name': status[0],
@@ -91,16 +98,16 @@ def newEmployees(request):
                                                       'login': status[2],
                                                       'password': status[3],
                                                       'role': status[4], })
-            context['message'] = 'Указанный логин уже существует!'
+            context['message'] = 'Указанный логин уже существует! Логин и пароль должны содержать не менее 8 символов!'
     return render(request, "addEmployees.html", context=context)
 
 
-def deleteEmployees(request, id_employee):
+def deleteEmployees(request, id_user, id_employee):
     Employees.objects.filter(id=id_employee).delete()  # удаление нужного клиента по id
-    return redirect('/employees/0')  # переход на основную страницу
+    return redirect(f'/{id_user}/employees/0')  # переход на основную страницу
 
 
-def new_doc(request, id_employee):
+def new_doc(request, id_user, id_employee):
     employee_db = Employees.objects.get(id=id_employee)  # выбор нужного клиента в базе
     dict_employee = {
         'login': employee_db.login,
@@ -111,4 +118,4 @@ def new_doc(request, id_employee):
     doc.render(context=dict_employee)
     doc.save(
         'C:/Users/eliza/Desktop/ЛичныеКабинеты/CyberClass%s.docx' % f'{employee_db.last_name}{employee_db.first_name}')
-    return redirect('/employees/0')  # переход на основную страницу
+    return redirect(f'/{id_user}/employees/0')  # переход на основную страницу

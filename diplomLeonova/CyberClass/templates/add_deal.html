@@ -10,7 +10,7 @@
 </head>
 <body class="align_new_client">
 <div class="container_client_content">
-    <form method="POST" class="container_new_client" action="/deals/{{id_client}}">
+    <form method="POST" class="container_new_client" action="/{{id_user}}/deals/{{id_client}}">
         {% csrf_token %}
         <div class="deal_client_label"><label>ФИО клиента: {{ client }}</label></div>
         <div>
@@ -18,7 +18,7 @@
             <div class="deal_client_input">{{ formDeal.service }}</div>
         </div>
         <div>
-            <a type="button" class='buttons_a' href="/0">Отмена</a>
+            <a type="button" class='buttons_a' href="/{{id_user}}/0">Отмена</a>
             <input type="submit" class="buttons_btn" value="Добавить"/>
         </div>
     </form>

@@ -14,3 +14,11 @@ class NewDeals(forms.Form):
 
     def form_values(self):  # метод возвращающий поля формы
         return ['service']
+
+
+class Authorization(forms.Form):
+    login = forms.CharField(label='Логин', min_length=8)
+    password = forms.CharField(label='Пароль', min_length=8)
+
+    def form_values(self):  # метод возвращающий поля формы
+        return ['login', 'password']
