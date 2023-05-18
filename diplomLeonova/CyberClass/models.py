@@ -27,6 +27,16 @@ class Deals(models.Model):
     date_deals = models.DateField()
 
 
+class Employees(models.Model):
+    last_name = models.CharField('Фамилия', max_length=100)  # Фамилия
+    first_name = models.CharField('Имя', max_length=100)  # Имя
+    login = models.CharField('Логин', max_length=100)  # Логин
+    password = models.CharField('Пароль', max_length=100)  # Пароль
+    role = models.CharField('Роль', max_length=15,
+                            choices=[('Администратор', 'Администратор'), ('Директор', 'Директор')],
+                            default='Администратор')  # Роль
+
+
 class ClientsForm(ModelForm):
     class Meta:
         model = Clients
@@ -43,3 +53,12 @@ class ServicesForm(ModelForm):
 
     def form_values(self):
         return ['name_services', 'service_duration', 'price', 'description']
+
+
+class EmployeesForm(ModelForm):
+    class Meta:
+        model = Employees
+        fields = '__all__'
+
+    def form_values(self):
+        return ['last_name', 'first_name', 'login', 'password', 'role']

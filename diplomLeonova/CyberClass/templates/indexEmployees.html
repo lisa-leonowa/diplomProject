@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_main.css' %}"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_body.css' %}"/>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/for_header.css' %}"/>
+
+    {% load static %}
+    <script src="{% static 'scripts/startForms.js'%}"></script>
+    {% load static %}
+    <script src="{% static 'scripts/updateClient.js'%}"></script>
+
+    <title>{{ title }}</title>
+</head>
+<body>
+<header class="header">
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            {{ formSearch }}
+            <input type="submit" class="buttons_btn" value="Поиск"/>
+        </div>
+    </form>
+    <div class="container_header_btn">
+        <a href="/statistics" class="buttons_a">Статистика</a>
+        <a href="/0" class="buttons_a">Работа с клиентами</a>
+        <a href="/services/0" class="buttons_a">Работа с услугами</a>
+        <a href="/employees/0" class="buttons_a">Работа с сотрудниками</a>
+        <a href="/employees/newEmployees" class="buttons_a">Новый сотрудник</a>
+    </div>
+</header>
+<main>
+    {% for key, i in forms.items %}
+    <div class="container_client_content">
+        <div class="container_client">
+            <p>ФИ: {{ i.last_name.value}} {{ i.first_name.value }}</p>
+            <a type="button" class='buttons_a' href="/employees/delete/{{key}}">Удалить</a>
+            <button type="button" class="trigger buttons_btn">Подробнее</button>
+        </div>
+        <div class="content">
+            <div class="content_client">
+                <form id="{{key}}" method="post" class="form_client container_new_client" action="{{key}}">
+                    {% csrf_token %}
+                    <div>
+                        <div class="field_client_label"><label>Фамилия:</label></div>
+                        <div class="field_client_input">{{ i.last_name }}</div>
+                    </div>
+                    <div>
+                        <div class="field_client_label"><label>Имя:</label></div>
+                        <div class="field_client_input">{{ i.first_name }}</div>
+                    </div>
+                    <div>
+                        <div class="field_client_label"><label>Логин:</label></div>
+                        <div class="field_client_input">{{ i.login }}</div>
+                    </div>
+                    <div>
+                        <div class="field_client_label"><label>Пароль:</label></div>
+                        <div class="field_client_input">{{ i.password }}</div>
+                    </div>
+                    <div>
+                        <div class="field_client_label"><label>Роль:</label></div>
+                        <div class="field_client_input">{{ i.role }}</div>
+                    </div>
+                    <input id="btnHidden{{key}}" type="submit" class="buttons_btn" value="Сохранить">
+                </form>
+                <script>startForms('{{key}}', 'btnHidden{{key}}')</script>
+
+            </div>
+            <div class="container_buttons_clients">
+                <button id="updateEmployee/{{ key }}" type="button" class="buttons_btn"
+                        onclick="changeClick({{ key }}, 'updateEmployee/{{ key }}', 'btnHidden{{key}}')">Изменить
+                </button>
+                <a type="button" class='buttons_a' href="/employees/new_doc/{{key}}">Сделать копию</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% load static %}
+    <script src="{% static 'scripts/index.js'%}"></script>
+</main>
+</body>
+</html>

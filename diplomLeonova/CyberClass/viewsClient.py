@@ -7,15 +7,23 @@ from .forms import SearchClient
 from .forCyberClass import get_values, client_deals, get_id_all_clients, form_with_deals
 import re
 
-
-def add_client(valid_form):
-    value = get_values(valid_form)
+def check_fields(value):
     last_name = value[0][0].upper() + value[0][1:].lower()
     first_name = value[1][0].upper() + value[1][1:].lower()
     full_name = value[2][0].upper() + value[2][1:].lower()
     phone = re.match(r'^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$', value[4])
     check = bool(phone) and (not any(ch.isdigit() for ch in last_name + first_name + full_name))
     if check:
+        return True
+    return False
+
+
+def add_client(valid_form):
+    value = get_values(valid_form)
+    last_name = value[0][0].upper() + value[0][1:].lower()
+    first_name = value[1][0].upper() + value[1][1:].lower()
+    full_name = value[2][0].upper() + value[2][1:].lower()
+    if check_fields(value):
         Clients.objects.create(last_name=last_name,
                                first_name=first_name,
                                full_name=full_name,
@@ -56,14 +64,16 @@ def newClient(request):
 def updateClient(clientform, id_client):
     values = get_values(clientform)  # получение новой информации
     client = Clients.objects.get(id=id_client)  # выбор нужного клиента в базе
-    # изменение информации
-    client.last_name = values[0]
-    client.first_name = values[1]
-    client.full_name = values[2]
-    client.gender = values[3]
-    client.phone = values[4]
-    client.remark = values[5]
-    client.save()  # сохранение изменения
+    if check_fields(values):
+        # изменение информации
+        client.last_name = values[0]
+        client.first_name = values[1]
+        client.full_name = values[2]
+        client.gender = values[3]
+        client.phone = values[4]
+        client.remark = values[5]
+        client.save()  # сохранение изменения
+
 
 
 # получение информации о всех клиентах

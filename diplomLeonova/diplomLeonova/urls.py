@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from CyberClass import viewsClient, viewsService, viewsDeals, viewsStatistics
+from CyberClass import viewsClient, viewsService, viewsDeals, viewsStatistics, viewsEmployees
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,5 +32,11 @@ urlpatterns = [
     path('deals/add/<int:id_client>', viewsDeals.add_deals),
     path('deals/delete/<int:id_client>', viewsDeals.delete_deals),
 
-    path('statistics', viewsStatistics.index)
+    path('statistics', viewsStatistics.index),
+
+    path('employees/<int:id_employee>', viewsEmployees.index),
+    path('employees/delete/<int:id_employee>', viewsEmployees.deleteEmployees),
+    path('employees/newEmployees', viewsEmployees.newEmployees),
+    path('employees/new_doc/<int:id_employee>', viewsEmployees.new_doc),
+
 ]
