@@ -18,19 +18,24 @@
 
 </head>
 <body>
-<header class="header">
-    <form method="POST">
-        {% csrf_token %}
-        <div>
-            {{ formSearch }}
-            <input type="submit" class="buttons_btn" value="Поиск"/>
+<header>
+    <div class="header_info">
+        <div class="div_info">{{ user_view }}</div>
+    </div>
+    <div class="header">
+        <form method="POST">
+            {% csrf_token %}
+            <div>
+                {{ formSearch }}
+                <input type="submit" class="buttons_btn" value="Поиск"/>
+            </div>
+        </form>
+        <div class="container_header_btn">
+            <a href="/{{id_user}}/0" class="buttons_a">Работа с клиентами</a>
+            <a href="/{{id_user}}/services/0" class="buttons_a">Работа с услугами</a>
+            <a href="/{{id_user}}/services/newService" class="buttons_a">Новая услуга</a>
+            <a href="/" class="buttons_a">Выход</a>
         </div>
-    </form>
-    <div class="container_header_btn">
-        <a href="/{{id_user}}/0" class="buttons_a">Работа с клиентами</a>
-        <a href="/{{id_user}}/services/0" class="buttons_a">Работа с услугами</a>
-        <a href="/{{id_user}}/services/newService" class="buttons_a">Новая услуга</a>
-        <a href="/" class="buttons_a">Выход</a>
     </div>
 </header>
 <main>

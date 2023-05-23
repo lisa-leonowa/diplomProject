@@ -1,12 +1,15 @@
 # Подключение модулей для работы с моделями, обработки событий,
 # получение измененной информации, проверки номера телефона
+import random
+
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.shortcuts import render, redirect
 from .models import Clients, ClientsForm
-from .forms import SearchClient
-from .forCyberClass import get_values, client_deals, check_user, form_with_deals
+from .forms import SearchClient, NewClient
+from .forCyberClass import get_values, client_deals, check_user, form_with_deals, get_user_info, send_message
 import re
 
+global cod
 
 def check_fields(value):
     last_name = value[0][0].upper() + value[0][1:].lower()
@@ -25,14 +28,8 @@ def add_client(valid_form):
     first_name = value[1][0].upper() + value[1][1:].lower()
     full_name = value[2][0].upper() + value[2][1:].lower()
     if check_fields(value):
-        Clients.objects.create(last_name=last_name,
-                               first_name=first_name,
-                               full_name=full_name,
-                               gender=value[3],
-                               phone=value[4],
-                               remark=value[5])
-        return [True]
-    return [False, [last_name, first_name, full_name, value[3], value[4], value[5]]]
+        return [True, [last_name, first_name, full_name, value[3], value[4], value[5]], value[6]]
+    return [False, [last_name, first_name, full_name, value[3], value[4], value[5], value[6]]]
 
 
 def deleteClient(request, id_user, id_client):
@@ -42,14 +39,31 @@ def deleteClient(request, id_user, id_client):
 
 # добавление нового клиента
 def newClient(request, id_user):
+    global cod
     context = {'title': 'Добавление клиента',
                'forms': ClientsForm(),
                'message': 'Добавление клиента',
-               'id_user': id_user}  # определение словаря с заголовком страницы
+               'id_user': id_user,
+               'user_view': get_user_info(id_user)}  # определение словаря с заголовком страницы
     if request.method == 'POST':
         status = add_client(ClientsForm(request.POST))
         if status[0]:
-            return redirect(f'/{id_user}/0')
+            status = status[1]
+            value = get_values(ClientsForm(request.POST))
+            cod = f'Ваш код подтверждения: {random.randint(0, 10)}{random.randint(0, 10)}{random.randint(0, 10)}{random.randint(0, 10)}{random.randint(0, 10)}'
+            send_message(value[5], cod)
+            form_new_client = NewClient(initial={'last_name': status[0],
+                                                 'first_name': status[1],
+                                                 'full_name': status[2],
+                                                 'gender': value[3],
+                                                 'phone': value[4],
+                                                 'mail': value[5],
+                                                 'remark': value[6]})
+            context = {'forms': form_new_client,
+                       'id_user': id_user,
+                       'title': 'Новый клиент',
+                       'message': 'Введите код подтверждения ниже'}
+            return render(request, "mail_confirmation.html", context=context)
         else:
             status = status[1]
             context['forms'] = ClientsForm(initial={'last_name': status[0],
@@ -57,7 +71,8 @@ def newClient(request, id_user):
                                                     'full_name': status[2],
                                                     'gender': status[3],
                                                     'phone': status[4],
-                                                    'remark': status[5], })
+                                                    'mail': status[5],
+                                                    'remark': status[6], })
             context['message'] = 'Данные были введены неверно!'
     return render(request, "newClient.html", context=context)
 
@@ -73,7 +88,8 @@ def updateClient(clientform, id_client):
         client.full_name = values[2]
         client.gender = values[3]
         client.phone = values[4]
-        client.remark = values[5]
+        client.mail = values[5]
+        client.remark = values[6]
         client.save()  # сохранение изменения
     return
 
@@ -89,6 +105,7 @@ def get_clients():
                                                                   'full_name': all_clients[i].full_name,
                                                                   'gender': all_clients[i].gender,
                                                                   'phone': all_clients[i].phone,
+                                                                  'mail': all_clients[i].mail,
                                                                   'remark': all_clients[i].remark}, )
     return initial_clients  # возврат
 
@@ -108,8 +125,33 @@ def searchClient(search):
                                                      'full_name': i.full_name,
                                                      'gender': i.gender,
                                                      'phone': i.phone,
+                                                     'mail': i.mail,
                                                      'remark': i.remark}, )
     return initial_clients
+
+
+def mail_confirmation(request, id_user):
+    global cod
+    form = NewClient(request.POST)
+    if form.is_valid():
+        value = get_values(form)
+        if str(value[7]) == str(cod.split()[-1]):
+            Clients.objects.create(last_name=value[0],
+                                   first_name=value[1],
+                                   full_name=value[2],
+                                   gender=value[3],
+                                   phone=value[4],
+                                   mail=value[5],
+                                   remark=value[6])
+            return redirect(f'/{id_user}/0')
+        else:
+            context = {'forms': form,
+                       'id_user': id_user,
+                       'title': 'Новый клиент',
+                       'message': 'Код указан неверно!'
+                       }
+            return render(request, "mail_confirmation.html", context=context)
+
 
 
 # работа главной станицы клиентов
@@ -117,7 +159,8 @@ def index(request, id_user, id_client):
     context = {'title': 'Система управление клиентами',
                'formSearch': SearchClient(),
                'forms': form_with_deals(get_clients(), client_deals()),
-               'id_user': id_user}
+               'id_user': id_user,
+               'user_view': get_user_info(id_user)}
     if (request.method == "POST") and (id_client != 0):  # обработка изменения информации
         user_form = ClientsForm(request.POST)  # заполненная форма
         updateClient(user_form, id_client)  # вызов функции обновления информации

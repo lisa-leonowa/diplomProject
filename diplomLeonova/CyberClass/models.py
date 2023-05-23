@@ -11,6 +11,7 @@ class Clients(models.Model):
     full_name = models.CharField('Отчество', max_length=100)  # Отчество
     gender = models.CharField('Пол', max_length=1, choices=[('м', 'муж'), ('ж', 'жен')], default='ж')  # Пол
     phone = models.CharField('Номер телефона', max_length=13)  # Номер телефона
+    mail = models.EmailField('Почта', max_length=100)  # Почта
     remark = models.CharField('Примечание', max_length=200, null=True, blank=True)  # Примечание
 
 
@@ -43,7 +44,7 @@ class ClientsForm(ModelForm):
         fields = '__all__'
 
     def form_values(self):
-        return ['last_name', 'first_name', 'full_name', 'gender', 'phone', 'remark']
+        return ['last_name', 'first_name', 'full_name', 'gender', 'phone', 'mail', 'remark']
 
 
 class ServicesForm(ModelForm):

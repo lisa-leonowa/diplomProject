@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.shortcuts import render, redirect
 from .models import Services, ServicesForm
 from .forms import SearchClient
-from .forCyberClass import get_values, check_user
+from .forCyberClass import get_values, check_user, get_user_info
 
 
 # получение информации о всех услугах
@@ -47,7 +47,8 @@ def newService(request, id_user):
     context = {'title': 'Добавление услуги',
                'forms': ServicesForm(),
                'message': 'Добавление услуги',
-               'id_user': id_user}  # определение словаря с заголовком страницы
+               'id_user': id_user,
+               'user_view': get_user_info(id_user)}  # определение словаря с заголовком страницы
     if request.method == 'POST':
         status = add_service(ServicesForm(request.POST))
         if status:
@@ -80,7 +81,8 @@ def index(request, id_user, id_service):
     context = {'title': 'Система управление клиентами',
                'forms': get_services(),
                'formSearch': SearchClient(),
-               'id_user': id_user}  # определение словаря с заголовком страницы
+               'id_user': id_user,
+               'user_view': get_user_info(id_user)}  # определение словаря с заголовком страницы
     if (request.method == "POST") and (id_service != 0):  # обработка изменения информации
         user_form = ServicesForm(request.POST)  # заполненная форма
         updateService(user_form, id_service)  # вызов функции обновления информации

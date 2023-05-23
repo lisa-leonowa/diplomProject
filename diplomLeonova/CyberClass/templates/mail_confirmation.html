@@ -11,7 +11,7 @@
 <body class="align_new_client">
 <div class="container_client_content">
     <p class="client_message">{{ message }}</p>
-    <form method="post" class="container_new_client" action="/{{id_user}}/newClient">
+    <form method="post" class="container_new_client" action="/{{id_user}}/mail_confirmation">
         {% csrf_token %}
         <div>
             <div class="field_client_label"><label>Фамилия:</label></div>
@@ -40,6 +40,10 @@
         <div>
             <div class="field_client_label"><label>Примечание:</label></div>
             <div class="field_client_input">{{ forms.remark }}</div>
+        </div>
+        <div>
+            <div class="field_client_label"><label>Код подтверждения:</label></div>
+            <div class="field_client_input">{{ forms.mail_confirmation }}</div>
         </div>
         <div>
             <a type="button" class='buttons_a' href="/{{id_user}}/0">Отмена</a>

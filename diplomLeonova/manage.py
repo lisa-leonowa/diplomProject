@@ -1,11 +1,22 @@
-#!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
+"""
+Дипломный проект по специальности 09.02.07 «Информационные системы и программирование»
+по теме «Разработка программной системы управления клиентами предприятия ООО «Кибер класс»».
+Название: manage.py.
+Разработал: Леонова Е. А., группа ТИП-81.
+Дата и номер версии: 19.05.2023 v3.0.
+Язык: Python.
+Краткое описание:
+Данный модуль отвечает за запуск сервера Системы управления клиентами.
+
+Сторонние библиотеки, используемые в программе:
+os – модуль, для работы с Операционной системой;
+sys - модуль, позволяющий на прямую работать с интерпретатором;
+"""
 import os
 import sys
 
 
 def main():
-    """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'diplomLeonova.settings')
     try:
         from django.core.management import execute_from_command_line

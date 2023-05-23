@@ -17,21 +17,26 @@
     <title>{{ title }}</title>
 </head>
 <body>
-<header class="header">
-    <form method="POST">
-        {% csrf_token %}
-        <div>
-            {{ formSearch }}
-            <input type="submit" class="buttons_btn" value="Поиск"/>
+<header>
+    <div class="header_info">
+        <div class="div_info">{{ user_view }}</div>
+    </div>
+    <div class="header">
+        <form method="POST">
+            {% csrf_token %}
+            <div>
+                {{ formSearch }}
+                <input type="submit" class="buttons_btn" value="Поиск"/>
+            </div>
+        </form>
+        <div class="container_header_btn">
+            <a href="/{{id_user}}/statistics" class="buttons_a">Статистика</a>
+            <a href="/{{id_user}}/0" class="buttons_a">Работа с клиентами</a>
+            <a href="/{{id_user}}/services/0" class="buttons_a">Работа с услугами</a>
+            <a href="/{{id_user}}/employees/0" class="buttons_a">Работа с сотрудниками</a>
+            <a href="/{{id_user}}/employees/newEmployees" class="buttons_a">Новый сотрудник</a>
+            <a href="/" class="buttons_a">Выход</a>
         </div>
-    </form>
-    <div class="container_header_btn">
-        <a href="/{{id_user}}/statistics" class="buttons_a">Статистика</a>
-        <a href="/{{id_user}}/0" class="buttons_a">Работа с клиентами</a>
-        <a href="/{{id_user}}/services/0" class="buttons_a">Работа с услугами</a>
-        <a href="/{{id_user}}/employees/0" class="buttons_a">Работа с сотрудниками</a>
-        <a href="/{{id_user}}/employees/newEmployees" class="buttons_a">Новый сотрудник</a>
-        <a href="/" class="buttons_a">Выход</a>
     </div>
 </header>
 <main>
@@ -44,7 +49,8 @@
         </div>
         <div class="content">
             <div class="content_client">
-                <form id="{{key}}" method="post" class="form_client container_new_client" action="/{{id_user}}/employees/{{key}}">
+                <form id="{{key}}" method="post" class="form_client container_new_client"
+                      action="/{{id_user}}/employees/{{key}}">
                     {% csrf_token %}
                     <div>
                         <div class="field_client_label"><label>Фамилия:</label></div>

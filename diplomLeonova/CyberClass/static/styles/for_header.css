@@ -22,3 +22,20 @@
 .container_header_btn{
     display:flex;
 }
+
+.header_info{
+    width: 70%;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.div_info{
+    padding: 0.2em;
+    border-radius: 0.2em;
+    background-color: #B4E3D9;
+    width: auto;
+    margin-bottom: 0.3em;
+    box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.2);
+}

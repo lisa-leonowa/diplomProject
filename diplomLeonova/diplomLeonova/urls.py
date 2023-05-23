@@ -1,18 +1,20 @@
 """
-URL configuration for diplomLeonova project.
+Дипломный проект по специальности 09.02.07 «Информационные системы и программирование»
+по теме «Разработка программной системы управления клиентами предприятия ООО «Кибер класс»».
+Название: urls.py.
+Разработал: Леонова Е. А., группа ТИП-81.
+Дата и номер версии: 19.05.2023 v3.0.
+Язык: Python.
+Краткое описание:
+Данный модуль отвечает за обработку используемых ссылок в Системе управления клиентами.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+Сторонние библиотеки, используемые в программе:
+django.contrib – модуль, позволяющий работать в режиме разработчика;
+django.urls – модуль, хранящий в себе набор шаблонов, которые обрабатывают полученные ссылки на запрашиваемую страницу,
+ позволяют выбрать правильный метод обработки;
+
+Библиотеки, используемые в программе:
+CyberClass – самостоятельно написанная библиотека, хранящая в себе набор методов обработки страницы;
 """
 from django.contrib import admin
 from django.urls import path
@@ -23,6 +25,7 @@ urlpatterns = [
     path('<int:id_user>/newClient', viewsClient.newClient),
     path('<int:id_user>/<int:id_client>', viewsClient.index),
     path('<int:id_user>/delete/<int:id_client>', viewsClient.deleteClient),
+    path('<int:id_user>/mail_confirmation', viewsClient.mail_confirmation),
 
     path('<int:id_user>/services/newService', viewsService.newService),
     path('<int:id_user>/services/<int:id_service>', viewsService.index),

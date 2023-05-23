@@ -1,5 +1,5 @@
 import os
-from .forCyberClass import all_services, get_purchased_services, for_diagram
+from .forCyberClass import all_services, get_purchased_services, for_diagram, get_user_info
 import matplotlib.pyplot as plt
 from django.shortcuts import render, redirect
 
@@ -25,5 +25,6 @@ def index(request, id_user):
     plt.savefig(f'{my_path}\\CyberClass\\static\\img\\diagram.png')
     #plt.show()
     context = {'title': 'Статистика продажи курсов',
-               'id_user': id_user}
+               'id_user': id_user,
+               'user_view': get_user_info(id_user)}
     return render(request, "indexStatistics.html", context=context)

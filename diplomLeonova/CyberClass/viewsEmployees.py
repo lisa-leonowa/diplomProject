@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Employees, EmployeesForm
 from .forms import SearchClient
-from .forCyberClass import get_values, check_user
+from .forCyberClass import get_values, check_user, get_user_info
 from docxtpl import DocxTemplate
 
 
@@ -50,7 +50,8 @@ def index(request, id_user, id_employee):
     context = {'title': 'Система управление клиентами',
                'formSearch': SearchClient(),
                'forms': get_clients(),
-               'id_user': id_user
+               'id_user': id_user,
+               'user_view': get_user_info(id_user)
                }
     if (request.method == "POST") and (id_employee != 0):  # обработка изменения информации
         user_form = EmployeesForm(request.POST)  # заполненная форма
@@ -85,7 +86,8 @@ def newEmployees(request, id_user):
     context = {'title': 'Добавление сотрудника',
                'forms': EmployeesForm(),
                'message': 'Добавление сотрудника',
-               'id_user': id_user
+               'id_user': id_user,
+               'user_view': get_user_info(id_user)
                }  # определение словаря с заголовком страницы
     if request.method == 'POST':
         status = add_employee(EmployeesForm(request.POST))
