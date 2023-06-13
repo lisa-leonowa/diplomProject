@@ -6,7 +6,7 @@ function changeClick(my_id, updateButton, BtnHidden){
     var index; // переменная счетчик
     let btnHidden = document.getElementById(BtnHidden);
 
-    for (index = 0; index < 5; ++index) { // цикл, меняющий значение возможности редактировать
+    for (index = 0; index < change.length; ++index) { // цикл, меняющий значение возможности редактировать
         if (change[index].hasAttribute("readonly")) {
             change[index].removeAttribute("readonly");
             btnHidden.removeAttribute("hidden"); }

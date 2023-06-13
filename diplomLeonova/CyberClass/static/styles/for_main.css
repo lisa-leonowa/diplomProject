@@ -51,7 +51,7 @@
 /* Стиль кнопок Изменить и Сохранить информацию о клиенте */
 .buttons_btn{
     font-family: cursive;
-    font-size: 0.9em;
+    font-size: 0.8em;
     background-color: WhiteSmoke;
     border: 0.2em solid WhiteSmoke;
     border-radius: 0.2em;
@@ -75,10 +75,10 @@
     border-radius: 0.2em;
     text-decoration: none;
     color: #000000;
-    padding: 0.2em;
-    height: 1.5em;
+    padding: 0.3em;
+
     margin: 0.3em;
-    font-size: 0.95em;
+    font-size: 0.8em;
     text-align: center;
 }
 /* Стиль столбца с формой клиента и Историей покупок */
